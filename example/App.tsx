@@ -1,35 +1,26 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useMemo, useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [ state, setState ] = useState(1)
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    const mod2 = useMemo(() => {
+        return state
+    }, [ state % 2 ])
+
+    return (
+        <div>
+            <p>@gladiolus/modal</p>
+
+            <p>state: { state }</p>
+            <p key={ state % 2 }>state: { state }</p>
+            <p>mod2: { mod2 }</p>
+
+            <button onClick={ () => setState(1) }>set to 1</button>
+            <button onClick={ () => setState(2) }>set to 2</button>
+            <button onClick={ () => setState(3) }>set to 3</button>
+            <button onClick={ () => setState(4) }>set to 4</button>
+        </div>
+    )
 }
 
 export default App
