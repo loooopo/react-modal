@@ -1,12 +1,12 @@
 import { createContext, ReactNode, useState } from "react";
-import { ModalManager } from "./manager.ts";
+import { ModalManager, seal } from "./manager.ts";
 import { ModalBuilder, ModalRenderer } from "./builder.tsx";
 import { debugLog } from "./utils.ts";
 
 /**
  * An internal-maintainable state for the modal context.
  */
-type ContextState = {
+type ContextState<PayloadMap extends Record<string, unknown> = any> = {
     // ========== state ==========
     /**
      * A number, each bit of its binary representation represents the visibility of a modal.
@@ -37,7 +37,7 @@ type ContextState = {
      *
      * FIXME: This is not a good practice to use `any` here.
      */
-    manager: ModalManager<any>
+    manager: ModalManager<PayloadMap>
 }
 
 // @ts-expect-error There is no need to provide a default value.
@@ -47,6 +47,9 @@ function ModalRoot<ModalPayloadMap extends Record<string, unknown> = any>({ mana
     manager: ModalManager<ModalPayloadMap>,
     children: ReactNode
 }) {
+    // ! seal the manager to prevent further modification
+    seal();
+
     const [ visibility, setVisibility ] = useState<number>(0)
 
     // 不使用 useState 避免导致其他组件重新渲染
@@ -58,7 +61,7 @@ function ModalRoot<ModalPayloadMap extends Record<string, unknown> = any>({ mana
     }
 
     const hideSpec = (priority: number) => {
-        debugLog(`[ModalRoot] close | priority=${ priority }`)
+        debugLog(`[ModalRoot] hide | priority=${ priority }`)
         setVisibility(prevState => prevState & ~(0b1 << priority))
     }
 
@@ -79,7 +82,7 @@ function ModalRoot<ModalPayloadMap extends Record<string, unknown> = any>({ mana
                             key={ `modal-${ name }` }
                             visible={ (visibility & (0b1 << idx)) !== 0 }
                             priority={ idx }
-                            close={ () => hideSpec(idx) }
+                            hide={ () => hideSpec(idx) }
                             builder={ builder as ModalBuilder<unknown> }
                             payload={ tmp }/>
                     )
@@ -90,5 +93,7 @@ function ModalRoot<ModalPayloadMap extends Record<string, unknown> = any>({ mana
 }
 
 export {
+    type ContextState,
+    ctx,
     ModalRoot
 }
