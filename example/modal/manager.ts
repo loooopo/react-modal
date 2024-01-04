@@ -20,7 +20,11 @@ const seal = () => {
 }
 
 // ========== ========== ModalManager ========== ==========
-
+/**
+ * The manager of the modals.
+ *
+ * Use this to register the modals and get the hooks.
+ */
 class ModalManager<PayloadMap extends Record<string, unknown> = {}> {
     // bind hooks on the manager instance
     /**
