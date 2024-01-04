@@ -17,11 +17,11 @@ type ModalBuilder<Payload> = FC<{ payload: Payload, hide: VoidFunction }>
  *
  * Internal-use only.
  */
-function ModalRenderer<Payload = unknown>({ visible, priority, hide, builder, payload }: {
+function ModalRenderer<Payload = unknown>({ visible, priority, hide, BodyBuilder, payload }: {
     visible: boolean,
     priority: number,
     hide: VoidFunction
-    builder: ModalBuilder<Payload>
+    BodyBuilder: ModalBuilder<Payload>
     payload: Payload
 }) {
     const ref = useRef<HTMLDivElement>(null)
@@ -30,7 +30,8 @@ function ModalRenderer<Payload = unknown>({ visible, priority, hide, builder, pa
     return visible ? createPortal(
         <div ref={ ref } className={ 'modal-wrapper' }
              style={ { zIndex: ModalManager.zLimit - priority } }>
-            { builder({ payload, hide }) }
+            {/* use as component rather than function, to avoid react reporting an error on hook call */ }
+            <BodyBuilder payload={ payload } hide={ hide }/>
         </div>,
         document.body
     ) : null

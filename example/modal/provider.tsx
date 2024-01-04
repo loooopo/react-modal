@@ -83,7 +83,7 @@ function ModalRoot<ModalPayloadMap extends Record<string, unknown> = any>({ mana
                             visible={ (visibility & (0b1 << idx)) !== 0 }
                             priority={ idx }
                             hide={ () => hideSpec(idx) }
-                            builder={ builder as ModalBuilder<unknown> }
+                            BodyBuilder={ builder as ModalBuilder<unknown> }
                             payload={ tmp }/>
                     )
                 })
