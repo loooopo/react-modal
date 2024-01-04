@@ -14,11 +14,13 @@ manager.setZLimit(100)
 // register modals
 manager.register({
     modal1: ({ payload, hide }) => {
+        const hide2 = manager.useHideModal()
         return (
             <div>
                 <div>Modal 1</div>
-                <div>{ payload }</div>
+                <div>payload: { payload }</div>
                 <button onClick={ hide }>Click to Close</button>
+                <button onClick={ () => hide2('modal2') }>Hide Modal2</button>
             </div>
         )
     },
