@@ -1,4 +1,12 @@
+/**
+ * Misc config flags
+ */
 const MODAL_UTILS_CONFIG = {
+    /**
+     * Whether the debug log is enabled
+     *
+     * @default true
+     */
     enable_debug: true
 }
 
