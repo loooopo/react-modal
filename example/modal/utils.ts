@@ -8,5 +8,6 @@ const debugLog = (...data: any[]) => {
 }
 
 export {
+    MODAL_UTILS_CONFIG,
     debugLog
 }

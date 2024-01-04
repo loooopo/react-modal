@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useState } from "react";
 import { ModalManager } from "./manager.ts";
-import { ModalBuilder, ModalTemplate } from "./builder.tsx";
+import { ModalBuilder, ModalRenderer } from "./builder.tsx";
 import { debugLog } from "./utils.ts";
 
 /**
@@ -71,7 +71,7 @@ function ModalRoot({ manager, children }: {
             {
                 Object.entries(manager.modalMap).map(([ name, builder ], idx) => {
                     return (
-                        <ModalTemplate
+                        <ModalRenderer
                             key={ `modal-${ name }` }
                             visible={ (visibility & (0b1 << idx)) !== 0 }
                             priority={ idx }

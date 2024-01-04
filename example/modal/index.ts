@@ -1,1 +1,4 @@
-// TODO: export necessary items
+export { type ModalBuilder } from "./builder.tsx"
+export { ModalManager } from "./manager.ts"
+export { ModalRoot } from "./provider.tsx"
+export { MODAL_UTILS_CONFIG } from "./utils.ts"

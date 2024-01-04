@@ -8,7 +8,14 @@ import { FC, useRef } from "react";
  */
 type ModalBuilder<Payload> = FC<{ payload: Payload, close: VoidFunction }>
 
-function ModalTemplate<Payload = unknown>({ visible, priority, close, builder, payload }: {
+/**
+ * Render a modal using the builder. Configure the priority and visibility of the modal.
+ *
+ * ---
+ *
+ * Internal-use only.
+ */
+function ModalRenderer<Payload = unknown>({ visible, priority, close, builder, payload }: {
     visible: boolean,
     priority: number,
     close: VoidFunction
@@ -25,4 +32,4 @@ function ModalTemplate<Payload = unknown>({ visible, priority, close, builder, p
 }
 
 export type { ModalBuilder }
-export { ModalTemplate }
+export { ModalRenderer }
