@@ -1,4 +1,6 @@
 import { ModalBuilder } from "./builder.tsx";
+import { useContext } from "react";
+import { ctx } from "./provider.tsx";
 
 // ========== ========== Sealing ========== ==========
 
@@ -20,17 +22,34 @@ const seal = () => {
 // ========== ========== ModalManager ========== ==========
 
 class ModalManager<PayloadMap extends Record<string, unknown> = {}> {
+    // bind hooks on the manager instance
+    public useShowModal = () => {
+        const { showWithPayload } = useContext(ctx);
+
+        return <ModalName extends keyof PayloadMap>(name: ModalName, payload: PayloadMap[ModalName]) => {
+            const priority = ModalManager.instance!.priorityOf(name)
+            showWithPayload(priority, payload)
+        }
+    }
+
+    // ========== SEPARATOR ==========
+
     /**
      * Internal-use only.
      * @private
      */
     static #instantiated: boolean = false;
+    static #instance: ModalManager<any> | null = null;
+    static get instance(): ModalManager<any> | null {
+        return ModalManager.#instance
+    }
 
     constructor() {
         if(ModalManager.#instantiated) {
             throw new Error('You can only instantiate "ModalManager" once!');
         }
         ModalManager.#instantiated = true;
+        ModalManager.#instance = this;
     }
 
     /**
