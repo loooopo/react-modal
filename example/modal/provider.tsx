@@ -32,15 +32,19 @@ type ContextState = {
     // ========== pass-through ==========
     /**
      * A modal manager instance.
+     *
+     * ---
+     *
+     * FIXME: This is not a good practice to use `any` here.
      */
-    manager: ModalManager
+    manager: ModalManager<any>
 }
 
 // @ts-expect-error There is no need to provide a default value.
 const ctx = createContext<ContextState>(null)
 
-function ModalRoot({ manager, children }: {
-    manager: ModalManager,
+function ModalRoot<ModalPayloadMap extends Record<string, unknown> = any>({ manager, children }: {
+    manager: ModalManager<ModalPayloadMap>,
     children: ReactNode
 }) {
     const [ visibility, setVisibility ] = useState<number>(0)
