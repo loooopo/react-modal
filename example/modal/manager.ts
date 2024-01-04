@@ -1,4 +1,4 @@
-import { ModalBuilder } from "./builder.tsx";
+import { ModalBodyBuilder } from "./builder.tsx";
 import { useContext } from "react";
 import { ctx } from "./provider.tsx";
 
@@ -23,13 +23,29 @@ const seal = () => {
 
 class ModalManager<PayloadMap extends Record<string, unknown> = {}> {
     // bind hooks on the manager instance
-    public useShowModal = () => {
+    /**
+     * **Hook:** useShowModal
+     */
+    public useShowModal = (): <ModalName extends keyof PayloadMap>(name: ModalName, payload: PayloadMap[ModalName]) => void => {
         const { showWithPayload } = useContext(ctx);
 
         return <ModalName extends keyof PayloadMap>(name: ModalName, payload: PayloadMap[ModalName]) => {
             const priority = ModalManager.instance!.priorityOf(name)
             if(priority === undefined) throw new Error(`The modal "${ name as string }" is not registered!`)
             showWithPayload(priority, payload)
+        }
+    }
+
+    /**
+     * **Hook:** useHideModal
+     */
+    public useHideModal() {
+        const { hideSpec } = useContext(ctx);
+
+        return <ModalName extends keyof PayloadMap>(name: ModalName) => {
+            const priority = ModalManager.instance!.priorityOf(name)
+            if(priority === undefined) throw new Error(`The modal "${ name as string }" is not registered!`)
+            hideSpec(priority)
         }
     }
 
@@ -99,8 +115,8 @@ class ModalManager<PayloadMap extends Record<string, unknown> = {}> {
     /**
      * The map of modals' names and their Body builders.
      */
-    #modalMap: { [name in keyof PayloadMap]: ModalBuilder<PayloadMap[name]> } = {} as any;
-    public get modalMap(): { [name in keyof PayloadMap]: ModalBuilder<PayloadMap[name]> } {
+    #modalMap: { [name in keyof PayloadMap]: ModalBodyBuilder<PayloadMap[name]> } = {} as any;
+    public get modalMap(): { [name in keyof PayloadMap]: ModalBodyBuilder<PayloadMap[name]> } {
         return { ...(this.#modalMap) };
     }
 
@@ -110,7 +126,7 @@ class ModalManager<PayloadMap extends Record<string, unknown> = {}> {
      *
      * @param modalMap A map of modals' names and their FCs.
      */
-    public register(modalMap: { [name in keyof PayloadMap]: ModalBuilder<PayloadMap[name]> }) {
+    public register(modalMap: { [name in keyof PayloadMap]: ModalBodyBuilder<PayloadMap[name]> }) {
         sealingCheck();
 
         this.#priority = new Map<keyof PayloadMap, number>(
