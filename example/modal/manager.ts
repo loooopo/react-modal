@@ -52,25 +52,28 @@ class ModalManager<PayloadMap extends Record<string, unknown> = {}> {
     // ========== SEPARATOR ==========
 
     /**
-     * Internal-use only.
-     * @private
+     * The singleton instance of the manager.
      */
-    static #instantiated: boolean = false;
     static #instance: ModalManager<any> | null = null;
+
+    /**
+     * **Read Only**
+     *
+     * The singleton instance of the manager.
+     */
     static get instance(): ModalManager<any> | null {
         return ModalManager.#instance
     }
 
     constructor() {
-        if(ModalManager.#instantiated) {
+        if(ModalManager.#instance !== null) {
             throw new Error('You can only instantiate "ModalManager" once!');
         }
-        ModalManager.#instantiated = true;
         ModalManager.#instance = this;
     }
 
     /**
-     * Internal-use only.
+     * The real zLimit under setter/getter.
      */
     static #zLimit: number = 1000;
 
