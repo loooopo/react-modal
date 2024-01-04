@@ -11,11 +11,9 @@ import { ModalManager } from "./manager.ts";
 type ModalBodyBuilder<Payload> = FC<{ payload: Payload, hide: VoidFunction }>
 
 /**
+ * **Internal-use only**
+ *
  * Render a modal using the builder. Configure the priority and visibility of the modal.
- *
- * ---
- *
- * Internal-use only.
  */
 function ModalRenderer<Payload = unknown>({ visible, priority, hide, BodyBuilder, payload }: {
     visible: boolean,
