@@ -28,6 +28,7 @@ class ModalManager<PayloadMap extends Record<string, unknown> = {}> {
 
         return <ModalName extends keyof PayloadMap>(name: ModalName, payload: PayloadMap[ModalName]) => {
             const priority = ModalManager.instance!.priorityOf(name)
+            if(priority === undefined) throw new Error(`The modal "${ name as string }" is not registered!`)
             showWithPayload(priority, payload)
         }
     }
@@ -54,37 +55,49 @@ class ModalManager<PayloadMap extends Record<string, unknown> = {}> {
 
     /**
      * Internal-use only.
-     * @private
      */
-    #zLimit = 1000;
+    static #zLimit: number = 1000;
 
     /**
      * The maximum z-index of the modal. (The z-index of the modal is 'ZLimit - priority')
      *
      * This should be modified as early as possible (if necessary).
+     *
+     * @default 1000
      */
-    public get zLimit() {
-        return this.#zLimit
+    public static get zLimit() {
+        return ModalManager.#zLimit;
     }
 
-    public set zLimit(value: number) {
+    public static set zLimit(value: number) {
         sealingCheck();
 
-        this.#zLimit = value;
+        if(value <= 0) throw new Error('The zLimit must be greater than 0!');
+
+        ModalManager.#zLimit = value;
     }
 
+    public setZLimit(value: number) {
+        ModalManager.zLimit = value;
+    }
+
+    /**
+     * The priority of the modal.
+     * - start from 0, the lower the priority, the higher the level of display
+     * - the z-index of the modal is 'ZLimit - priority'
+     */
     #priority = new Map<keyof PayloadMap, number>();
 
     /**
      * Get the priority of the modal. If the modal is not registered, return -1.
      * @param name The name of the modal.
      */
-    public priorityOf(name: keyof PayloadMap): number {
-        return this.#priority.get(name) ?? -1;
+    public priorityOf(name: keyof PayloadMap): number | undefined {
+        return this.#priority.get(name);
     }
 
     /**
-     * The stack of modals' names.
+     * The map of modals' names and their Body builders.
      */
     #modalMap: { [name in keyof PayloadMap]: ModalBuilder<PayloadMap[name]> } = {} as any;
     public get modalMap(): { [name in keyof PayloadMap]: ModalBuilder<PayloadMap[name]> } {
