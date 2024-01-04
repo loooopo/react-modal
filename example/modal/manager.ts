@@ -53,6 +53,9 @@ class ModalManager<PayloadMap extends Record<string, unknown> = {}> {
         }
     }
 
+    // TODO: useVisibility
+    // TODO: useModal
+
     // ========== SEPARATOR ==========
 
     /**
