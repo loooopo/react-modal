@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useState } from "react";
 import { ModalManager, seal } from "./manager.ts";
-import { ModalBuilder, ModalRenderer } from "./builder.tsx";
+import { ModalBodyBuilder, ModalRenderer } from "./builder.tsx";
 import { debugLog } from "./utils.ts";
 
 /**
@@ -83,7 +83,7 @@ function ModalRoot<ModalPayloadMap extends Record<string, unknown> = any>({ mana
                             visible={ (visibility & (0b1 << idx)) !== 0 }
                             priority={ idx }
                             hide={ () => hideSpec(idx) }
-                            BodyBuilder={ builder as ModalBuilder<unknown> }
+                            BodyBuilder={ builder as ModalBodyBuilder<unknown> }
                             payload={ tmp }/>
                     )
                 })
