@@ -1,6 +1,11 @@
-/* container */
+/* wrapper */
 .modal-wrapper {
     position: fixed;
     width: 100%;
     height: 100%;
+    background: var(--modal-wrapper-bg, transparent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
