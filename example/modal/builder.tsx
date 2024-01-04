@@ -1,4 +1,6 @@
 import { FC, useRef } from "react";
+import { createPortal } from "react-dom";
+import { ModalManager } from "./manager.ts";
 
 /**
  * A modal builder.
@@ -24,10 +26,13 @@ function ModalRenderer<Payload = unknown>({ visible, priority, hide, builder, pa
 }) {
     const ref = useRef<HTMLDivElement>(null)
 
-    return visible ? (
-        <div ref={ ref } className={ 'modal-wrapper' } style={ { zIndex: priority } }>
+    // TODO: support any target element to attach to, or pass 'null' as is
+    return visible ? createPortal(
+        <div ref={ ref } className={ 'modal-wrapper' }
+             style={ { zIndex: ModalManager.zLimit - priority } }>
             { builder({ payload, hide }) }
-        </div>
+        </div>,
+        document.body
     ) : null
 }
 
