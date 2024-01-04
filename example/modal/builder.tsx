@@ -8,7 +8,7 @@ import { ModalManager } from "./manager.ts";
  * @param payload The payload passed to the modal when it is shown.
  * @param close A function to close the modal.
  */
-type ModalBuilder<Payload> = FC<{ payload: Payload, hide: VoidFunction }>
+type ModalBodyBuilder<Payload> = FC<{ payload: Payload, hide: VoidFunction }>
 
 /**
  * Render a modal using the builder. Configure the priority and visibility of the modal.
@@ -21,7 +21,7 @@ function ModalRenderer<Payload = unknown>({ visible, priority, hide, BodyBuilder
     visible: boolean,
     priority: number,
     hide: VoidFunction
-    BodyBuilder: ModalBuilder<Payload>
+    BodyBuilder: ModalBodyBuilder<Payload>
     payload: Payload
 }) {
     const ref = useRef<HTMLDivElement>(null)
@@ -37,5 +37,5 @@ function ModalRenderer<Payload = unknown>({ visible, priority, hide, BodyBuilder
     ) : null
 }
 
-export type { ModalBuilder }
+export type { ModalBodyBuilder }
 export { ModalRenderer }
