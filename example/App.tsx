@@ -1,24 +1,12 @@
-import { useMemo, useState } from "react";
+import { manager } from "./modals.tsx";
 
 function App() {
-    const [ state, setState ] = useState(1)
-
-    const mod2 = useMemo(() => {
-        return state
-    }, [ state % 2 ])
+    const showModal = manager.useShowModal()
 
     return (
-        <div>
-            <p>@gladiolus/modal</p>
-
-            <p>state: { state }</p>
-            <p key={ state % 2 }>state: { state }</p>
-            <p>mod2: { mod2 }</p>
-
-            <button onClick={ () => setState(1) }>set to 1</button>
-            <button onClick={ () => setState(2) }>set to 2</button>
-            <button onClick={ () => setState(3) }>set to 3</button>
-            <button onClick={ () => setState(4) }>set to 4</button>
+        <div style={ { width: '100%' } }>
+            <button onClick={ () => showModal('modal1', 'a') }>show modal1</button>
+            <button onClick={ () => showModal('modal2', undefined) }>show modal2</button>
         </div>
     )
 }
